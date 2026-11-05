@@ -1,0 +1,128 @@
+# ==============================================================================
+# PSI-PORTAL: POLÍTICA DE CONTROLE DE CÓDIGO E PREVENÇÃO DE VAZAMENTO DE DADOS
+# Conformidade com ISO/IEC 27001 (A.8, A.9, A.10, A.12, A.18) e LGPD (Lei 13.709)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. ARQUIVOS E VARIÁVEIS DE AMBIENTE (CRÍTICO: NUNCA COMITAR .ENV)
+# ------------------------------------------------------------------------------
+.env
+.env*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+.env.backup
+
+# ------------------------------------------------------------------------------
+# 2. CHAVES PRIVADAS SSH, CERTIFICADOS E SEGREDOS CRIPTOGRÁFICOS
+# ------------------------------------------------------------------------------
+id_rsa
+id_rsa*
+id_ecdsa
+id_ecdsa.*
+id_ed25519
+id_ed25519.*
+id_dsa
+id_dsa.*
+*.pem
+*.key
+*.pkcs12
+*.pfx
+*.p12
+*.crt
+*.cert
+*.cer
+*.der
+
+# ------------------------------------------------------------------------------
+# 3. CREDENCIAIS DE ACESSO À NUVEM E PROVEDORES CLOUD (AWS, GCP, AZURE, OCI, K8S)
+# ------------------------------------------------------------------------------
+# Amazon Web Services (AWS)
+.aws/
+aws-credentials
+aws-config
+# Google Cloud Platform (GCP)
+*gcp*.json
+*service-account*.json
+*client_secret*.json
+# Microsoft Azure
+.azure/
+azureProfile.json
+*.publishsettings
+# Oracle Cloud Infrastructure (OCI)
+.oci/
+oci_api_key*
+# Docker e Kubernetes
+.kube/
+kubeconfig
+kubeconfig.yaml
+docker-compose.override.yml
+
+# ------------------------------------------------------------------------------
+# 4. TOKENS, SENHAS E ARQUIVOS DE CREDENCIAIS LOCAIS
+# ------------------------------------------------------------------------------
+secrets/
+*.secret
+*.token
+auth.json
+token.json
+credentials.json
+master.key
+
+# ------------------------------------------------------------------------------
+# 5. BANCOS DE DADOS LOCAIS, DUMPS E ARQUIVOS DE PERSISTÊNCIA
+# ------------------------------------------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.sql
+*.dump
+dump.rdb
+*.mdb
+*.ldb
+
+# ------------------------------------------------------------------------------
+# 6. DEPENDÊNCIAS DE PACOTES
+# ------------------------------------------------------------------------------
+node_modules/
+package-lock.json.bak
+jspm_packages/
+
+# ------------------------------------------------------------------------------
+# 7. LOGS E ARQUIVOS DE DEPURAÇÃO
+# ------------------------------------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ------------------------------------------------------------------------------
+# 8. BUILDS, ARQUIVOS TEMPORÁRIOS E COBERTURA DE TESTES
+# ------------------------------------------------------------------------------
+dist/
+build/
+coverage/
+.cache/
+.parcel-cache/
+tmp/
+temp/
+
+# ------------------------------------------------------------------------------
+# 9. SISTEMA OPERACIONAL E CONFIGURAÇÕES DE IDE
+# ------------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

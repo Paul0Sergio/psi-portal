@@ -1,0 +1,64 @@
+# ====================================================================
+# EXEMPLO DE CONFIGURAÇÃO NGINX COM PROXY REVERSO E SSL (ORACLE CLOUD)
+# Salve em: /etc/nginx/sites-available/psi-portal e crie symlink para sites-enabled
+# ====================================================================
+
+# Redirecionamento HTTP (Porta 80) para HTTPS (Porta 443)
+server {
+    listen 80;
+    listen [::]:80;
+    server_name seu-dominio.com.br www.seu-dominio.com.br;
+
+    # Validação do Certbot Let's Encrypt
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# Servidor HTTPS Seguro (Porta 443)
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name seu-dominio.com.br www.seu-dominio.com.br;
+
+    # Certificados SSL emitidos pelo Certbot (Let's Encrypt)
+    ssl_certificate /etc/letsencrypt/live/seu-dominio.com.br/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/seu-dominio.com.br/privkey.pem;
+
+    # Configurações de Cifra Segura (Compatível com Mozilla Intermediate)
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+
+    # Cabeçalhos de Proteção Extra
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+
+    # Proxy Reverso para a aplicação Node.js (Porta 3000)
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+
+        # Timeouts para conexões seguras
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
